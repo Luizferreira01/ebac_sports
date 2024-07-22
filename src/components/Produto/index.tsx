@@ -1,11 +1,13 @@
-import { Game } from '../../App'
+import { useDispatch } from 'react-redux'
+import { Produto as ProdutoType } from '../../App'
 import * as S from './styles'
 
-import { useDispatch } from 'react-redux'
-import { adicionarAoCarrinho } from '../../store/reducers/carrinho'
+import { adicionar } from '../../store/reducers/carrinho'
+import { favoritar } from '../../store/reducers/favoritar'
 
 type Props = {
-  game: Game
+  produto: ProdutoType
+  estaNosFavoritos: boolean
 }
 
 export const paraReal = (valor: number) =>
@@ -13,32 +15,28 @@ export const paraReal = (valor: number) =>
     valor
   )
 
-const Produto = ({ game }: Props) => {
-  const dispach = useDispatch()
+const ProdutoComponent = ({ produto, estaNosFavoritos }: Props) => {
+  const dispatch = useDispatch()
+
   return (
     <S.Produto>
       <S.Capa>
-        <S.Tag>{game.categoria}</S.Tag>
-        <img src={game.imagem} alt={game.titulo} />
+        <img src={produto.imagem} alt={produto.nome} />
       </S.Capa>
-      <S.Titulo>{game.titulo}</S.Titulo>
-      <S.Plataformas>
-        {game.plataformas.map((plat) => (
-          <li key={plat}>{plat}</li>
-        ))}
-      </S.Plataformas>
+      <S.Titulo>{produto.nome}</S.Titulo>
       <S.Prices>
-        {game.precoAntigo && <small>{paraReal(game.precoAntigo)}</small>}
-        <strong>{paraReal(game.preco)}</strong>
+        <strong>{paraReal(produto.preco)}</strong>
       </S.Prices>
-      <S.BtnComprar
-        onClick={() => dispach(adicionarAoCarrinho(game))}
-        type="button"
-      >
+      <S.BtnComprar onClick={() => dispatch(favoritar(produto))} type="button">
+        {estaNosFavoritos
+          ? '- Remover dos favoritos'
+          : '+ Adicionar aos favoritos'}
+      </S.BtnComprar>
+      <S.BtnComprar onClick={() => dispatch(adicionar(produto))} type="button">
         Adicionar ao carrinho
       </S.BtnComprar>
     </S.Produto>
   )
 }
 
-export default Produto
+export default ProdutoComponent

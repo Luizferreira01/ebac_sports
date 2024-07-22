@@ -1,27 +1,34 @@
-import { Game } from '../App'
+import { Produto as ProdutoType } from '../App'
 import Produto from '../components/Produto'
-import { useGetJogosQuery } from '../services/api'
 
 import * as S from './styles'
 
 type Props = {
-  jogos: Game[]
+  produtos: ProdutoType[]
+  favoritos: ProdutoType[]
 }
 
-const Produtos = () => {
-  const { data: jogos, isLoading } = useGetJogosQuery()
-  if (isLoading) {
-    return <h2>Carregando...</h2>
+const ProdutosComponent = ({ produtos, favoritos }: Props) => {
+  const produtoEstaNosFavoritos = (produto: ProdutoType) => {
+    const produtoId = produto.id
+    const IdsDosFavoritos = favoritos.map((f) => f.id)
+
+    return IdsDosFavoritos.includes(produtoId)
   }
+
   return (
     <>
       <S.Produtos>
-        {jogos?.map((game) => (
-          <Produto key={game.id} game={game} />
+        {produtos.map((produto) => (
+          <Produto
+            estaNosFavoritos={produtoEstaNosFavoritos(produto)}
+            key={produto.id}
+            produto={produto}
+          />
         ))}
       </S.Produtos>
     </>
   )
 }
 
-export default Produtos
+export default ProdutosComponent
