@@ -1,11 +1,3 @@
-/* eslint-disable prettier/prettier */
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { Game } from '../../App'
-
-type CarrinhoState = {
-  itens: Game[]
-}
-
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { Produto } from '../../App'
